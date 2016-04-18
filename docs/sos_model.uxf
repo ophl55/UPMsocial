@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>60</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Package::UsuarioList
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>330</x>
+      <y>60</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Package::Usuario
+--
+ID: int
+nombre: String
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>200</x>
+      <y>140</y>
+      <w>150</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=0..n</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>650</x>
+      <y>60</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Package::AmigoList
+--
+count: int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>650</x>
+      <y>450</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Package::Post
+--
+fecha: Date
+contenido: String
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>430</x>
+      <y>240</y>
+      <w>50</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=0..n</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>330</x>
+      <y>450</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Package::PostList
+--
+count: int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>530</x>
+      <y>140</y>
+      <w>140</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=0..n</panel_attributes>
+    <additional_attributes>120.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>530</x>
+      <y>540</y>
+      <w>140</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=0..n</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+</diagram>
