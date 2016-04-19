@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
-  <zoom_level>10</zoom_level>
+  <zoom_level>9</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
-      <y>60</y>
-      <w>210</w>
-      <h>190</h>
+      <x>36</x>
+      <y>63</y>
+      <w>189</w>
+      <h>171</h>
     </coordinates>
     <panel_attributes>Package::UsuarioList
 --
@@ -16,25 +16,25 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>330</x>
-      <y>60</y>
-      <w>210</w>
-      <h>190</h>
+      <x>333</x>
+      <y>63</y>
+      <w>189</w>
+      <h>171</h>
     </coordinates>
     <panel_attributes>Package::Usuario
 --
 ID: int
-nombre: String
+name: String
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>200</x>
-      <y>140</y>
-      <w>150</w>
-      <h>40</h>
+      <x>216</x>
+      <y>135</y>
+      <w>135</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
@@ -44,10 +44,10 @@ m2=0..n</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>650</x>
-      <y>60</y>
-      <w>210</w>
-      <h>190</h>
+      <x>621</x>
+      <y>63</y>
+      <w>189</w>
+      <h>171</h>
     </coordinates>
     <panel_attributes>Package::AmigoList
 --
@@ -57,15 +57,15 @@ count: int</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>650</x>
-      <y>450</y>
-      <w>210</w>
-      <h>190</h>
+      <x>621</x>
+      <y>414</y>
+      <w>189</w>
+      <h>171</h>
     </coordinates>
     <panel_attributes>Package::Post
 --
-fecha: Date
-contenido: String
+dt: Date
+content: String
 
 </panel_attributes>
     <additional_attributes/>
@@ -73,53 +73,108 @@ contenido: String
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>430</x>
-      <y>240</y>
-      <w>50</w>
-      <h>230</h>
+      <x>423</x>
+      <y>225</y>
+      <w>27</w>
+      <h>207</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
-m2=0..n</panel_attributes>
+m2=1</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;210.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>330</x>
-      <y>450</y>
-      <w>210</w>
-      <h>190</h>
+      <x>207</x>
+      <y>414</y>
+      <w>315</w>
+      <h>234</h>
     </coordinates>
     <panel_attributes>Package::PostList
 --
-count: int</panel_attributes>
+count: int
+l: List&lt;POST&gt; ????
+--
+GET: lista de posts
+GET: numéro de posts
+POST: nuevo post
+PUT: modificación de un post ???
+DELETE: eliminacion de un post ????</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>530</x>
-      <y>140</y>
-      <w>140</w>
-      <h>40</h>
+      <x>513</x>
+      <y>135</y>
+      <w>126</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
-m2=0..n</panel_attributes>
+m2=1</panel_attributes>
     <additional_attributes>120.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>530</x>
-      <y>540</y>
-      <w>140</w>
-      <h>40</h>
+      <x>513</x>
+      <y>495</y>
+      <w>126</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=0..n</panel_attributes>
     <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>45</x>
+      <y>162</y>
+      <w>126</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>contenedor/fábrica
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>216</x>
+      <y>576</y>
+      <w>126</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>contenedor/fábrica
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>630</x>
+      <y>162</y>
+      <w>126</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>coleccíon
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>342</x>
+      <y>162</y>
+      <w>126</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>controlador de AmigoList y PostList?
+bg=blue</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
