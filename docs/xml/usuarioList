@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<usuarioList>
+<usuario>
+  <name></name>
+  <postList>
+    <post>
+      <dt type="DATE"></dt>
+      <content></content>
+    </post>
+  ...
+    <post>
+      <dt type="DATE"></dt>
+      <content></content>
+    </post>
+  </postList>
+    <amigoList>
+    <amigo>
+      <userID></userID>
+    </amigo>
+    ...
+    <amigo>
+      <userID></userID>
+    </amigo>
+  </amigoList>
+</usuario>
+...
+<usuario>
+  <name></name>
+  <postList>
+    <post>
+      <dt type="DATE"></dt>
+      <content></content>
+    </post>
+  ...
+    <post>
+      <dt type="DATE"></dt>
+      <content></content>
+    </post>
+  </postList>
+    <amigoList>
+    <amigo>
+      <userID></userID>
+    </amigo>
+    ...
+    <amigo>
+      <userID></userID>
+    </amigo>
+  </amigoList>
+</usuario>
+</usuarioList>

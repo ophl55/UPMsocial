@@ -66,6 +66,9 @@ count: int</panel_attributes>
 --
 dt: Date
 content: String
+--
+PUT: modificación de un post ???
+DELETE: eliminacion de un post ????
 
 </panel_attributes>
     <additional_attributes/>
@@ -98,9 +101,7 @@ l: List&lt;POST&gt; ????
 --
 GET: lista de posts
 GET: numéro de posts
-POST: nuevo post
-PUT: modificación de un post ???
-DELETE: eliminacion de un post ????</panel_attributes>
+POST: nuevo post</panel_attributes>
     <additional_attributes/>
   </element>
   <element>

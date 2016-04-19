@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<post>
+  <dt type="DATE"></dt>
+  <content></content>
+</post>
+
+
+
+<!--
+<usuario nombre="Javier  Soriano" href="http://http://conwet.fi.upm.es/es/people/javiersoriano">
+<favoritos  href="http://misfavoritos.com/api/jsoriano/favoritos/"  start="1"  end="2" next="http://misfavoritos.com/api/jsoriano/favoritos?start=3&amp;end=4">
+<favorito  url="http://www.example.org/one” 
+href="http://misfavoritos.com/api/jsoriano/favoritos/a211528fb5108cddaa4b0d3aeccdbd
+cf” />
+<favorito  url="http://www.example.org/two" 
+href="http://misfavoritos.com/api/jsoriano/favoritos/e47d06a59309774edab56813438bd3
+ce”/>
+</favoritos>
+<etiquetas  href="http://misfavoritos.com/api/jsoriano/etiquetas/">
+<etiqueta  name=”ejemplo"  count="2" 
+href="http://misfavoritos.com/api/jsoriano/etiquetas/ejemplo"/>
+<etiqueta  name="test"  count="2" 
+href="http://misfavoritos.com/api/jsoriano/etiquetaa/test"/>
+</etiquetas>
+</favoritos>
+</usuario>
+-->
+</usuario>
