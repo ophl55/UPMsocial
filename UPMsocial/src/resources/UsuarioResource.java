@@ -28,7 +28,7 @@ public class UsuarioResource {
 	@Path("{usuario}")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response getUsuario(@PathParam("usuario") String id) {
+	public Response getUser(@PathParam("usuario") String id) {
 		Response res;
 		Usuario usuario;
 		if (UsuarioDao.getInstance().getModel().containsKey(id)) {
@@ -50,7 +50,7 @@ public class UsuarioResource {
 
 	@Path("{usuario}")
 	@DELETE
-	public Response deleteTodo(@PathParam("usuario") String id) {
+	public Response deleteUser(@PathParam("usuario") String id) {
 		Response res;
 		if (UsuarioDao.getInstance().getModel().containsKey(id)) {
 			UsuarioDao.getInstance().getModel().remove(id);
