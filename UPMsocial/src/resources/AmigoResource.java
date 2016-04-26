@@ -13,11 +13,13 @@ public class AmigoResource {
 	@Path("{amigo}")
 	@DELETE
 	public Response removeFriend(@PathParam("usuario") String user_id, @PathParam("amigo") String friend_id) {
+		int userId_int = Integer.parseInt(user_id), friendId_int = Integer.parseInt(friend_id);
 		Response res;
-		if (UsuarioDao.getInstance().containsId(user_id) && UsuarioDao.getInstance().containsId(friend_id)) {
+		if (UsuarioDao.getInstance().containsId(userId_int) && UsuarioDao.getInstance().containsId(friendId_int)) {
 			// User and friend exist...
 			// Remove friend from users friend list
-			UsuarioDao.getInstance().getUser(user_id).getAmigos().remove(UsuarioDao.getInstance().getUser(friend_id));
+			UsuarioDao.getInstance().getUser(userId_int).getAmigos()
+					.remove(UsuarioDao.getInstance().getUser(friendId_int));
 			res = Response.ok().build();
 		} else {
 			// User or friend not existing

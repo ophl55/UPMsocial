@@ -1,24 +1,24 @@
 package dao;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import model.Usuario;
 
 public class UsuarioDao {
 
-	// private Map<String, Usuario> contentProvider = new HashMap<>();
-
-	private ArrayList<Usuario> contentProvider = new ArrayList<>();
+	private Map<Integer, Usuario> contentProvider = new HashMap<>();
+	private int lastId = 0;
 
 	private static UsuarioDao instance = null;
 
 	private UsuarioDao() {
 
-		Usuario usuario = new Usuario("", "Usuario1");
+		Usuario usuario = new Usuario("Usuario1");
 		addUser(usuario);
-		usuario = new Usuario("", "Usuario2");
+		usuario = new Usuario("Usuario2");
 		addUser(usuario);
 
 	}
@@ -37,11 +37,11 @@ public class UsuarioDao {
 	 *            User to be added (id of user not important)
 	 * @return The generated ID for the user as a String
 	 */
-	public String addUser(Usuario usuario) {
-		contentProvider.add(usuario);
-		String id = Integer.toString(contentProvider.indexOf(usuario));
-		usuario.setId(id);
-		return id;
+	public int addUser(Usuario usuario) {
+		usuario.setId(lastId);
+		contentProvider.put(usuario.getId(), usuario);
+		lastId++;
+		return usuario.getId();
 	}
 
 	/**
@@ -52,10 +52,11 @@ public class UsuarioDao {
 	 * @return {@code true} if the user was removed successfully
 	 */
 	public boolean removeUser(Usuario usuario) {
-		// the remove-method of ArrayList automatically returns true if removed
-		// successfully,
-		// else false
-		return contentProvider.remove(usuario);
+		if (!containsId(usuario.getId()))
+			return false;
+
+		contentProvider.remove(usuario.getId());
+		return true;
 	}
 
 	/**
@@ -65,11 +66,11 @@ public class UsuarioDao {
 	 *            the id of the user to delete
 	 * @return {@code true} if the user is removed successfully
 	 */
-	public boolean removeUserById(String id) {
+	public boolean removeUserById(int id) {
 		if (!containsId(id))
 			return false;
 
-		contentProvider.remove(Integer.parseInt(id));
+		contentProvider.remove(id);
 		return true;
 	}
 
@@ -81,7 +82,7 @@ public class UsuarioDao {
 	 * @return {@code true} if the user is found in the list
 	 */
 	public boolean contains(Usuario usuario) {
-		return contentProvider.contains(usuario);
+		return contentProvider.containsValue(usuario);
 	}
 
 	/**
@@ -90,39 +91,34 @@ public class UsuarioDao {
 	 *            the id to be searched
 	 * @return {@code true} if the id is inside the range of the list
 	 */
-	public boolean containsId(String id) {
-		int id_int = Integer.parseInt(id);
-		return 0 <= id_int && id_int < contentProvider.size();
+	public boolean containsId(int id) {
+		return contentProvider.containsKey(id);
 	}
 
 	public Collection<Usuario> getUsers() {
-		return contentProvider;
+		return contentProvider.values();
 	}
 
 	/**
 	 * Replaces (modifies) the user with the specified id by the new user
 	 * 
-	 * @param id
-	 *            the id of the user to be replaced
 	 * @param usuario
 	 *            the new user data
 	 * @return {@code true} if the user is replaced successfully, false if the
 	 *         id doesn't exist.
 	 */
-	public boolean replaceUser(String id, Usuario usuario) {
-		if (!containsId(id))
+	public boolean replaceUser(Usuario usuario) {
+		if (!containsId(usuario.getId()))
 			return false;
 
-		int id_int = Integer.parseInt(id);
-		contentProvider.set(id_int, usuario);
+		contentProvider.put(usuario.getId(), usuario);
 		return true;
 	}
 
-	public Usuario getUser(String id) throws NoSuchElementException {
+	public Usuario getUser(int id) throws NoSuchElementException {
 		if (!containsId(id))
 			throw new NoSuchElementException("User with id " + id + " not existing in List!");
-		int id_int = Integer.parseInt(id);
-		return contentProvider.get(id_int);
+		return contentProvider.get(id);
 	}
 
 }

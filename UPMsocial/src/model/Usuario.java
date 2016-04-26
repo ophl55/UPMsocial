@@ -6,29 +6,29 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Usuario {
-	private String id;
+	private int id;
 	private String nombre;
-	private Map<String, Usuario> amigos;
+
+	private Map<Integer, Usuario> amigos;
 
 	public Usuario() {
 	}
 
-	public Usuario(String id, String nombre) {
-		this.id = id;
+	public Usuario(String nombre) {
 		this.nombre = nombre;
 	}
 
-	public Usuario(String id, String nombre, Map<String, Usuario> amigos) {
+	public Usuario(int id, String nombre, Map<Integer, Usuario> amigos) {
 		this.id = id;
 		this.nombre = nombre;
 		this.amigos = amigos;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -40,11 +40,11 @@ public class Usuario {
 		this.nombre = nombre;
 	}
 
-	public Map<String, Usuario> getAmigos() {
+	public Map<Integer, Usuario> getAmigos() {
 		return amigos;
 	}
 
-	public void setAmigos(Map<String, Usuario> amigos) {
+	public void setAmigos(Map<Integer, Usuario> amigos) {
 		this.amigos = amigos;
 	}
 

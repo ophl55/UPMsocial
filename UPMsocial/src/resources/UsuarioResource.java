@@ -29,10 +29,11 @@ public class UsuarioResource {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response getUser(@PathParam("usuario") String id) {
+		int id_int = Integer.parseInt(id);
 		Response res;
 		Usuario usuario;
-		if (UsuarioDao.getInstance().containsId(id)) {
-			usuario = UsuarioDao.getInstance().getUser(id);
+		if (UsuarioDao.getInstance().containsId(id_int)) {
+			usuario = UsuarioDao.getInstance().getUser(id_int);
 			res = Response.ok(usuario).build();
 		} else {
 			res = Response.status(Response.Status.NOT_FOUND).build();
@@ -51,9 +52,10 @@ public class UsuarioResource {
 	@Path("{usuario}")
 	@DELETE
 	public Response deleteUser(@PathParam("usuario") String id) {
+		int id_int = Integer.parseInt(id);
 		Response res;
-		if (UsuarioDao.getInstance().containsId(id)) {
-			UsuarioDao.getInstance().removeUserById(id);
+		if (UsuarioDao.getInstance().containsId(id_int)) {
+			UsuarioDao.getInstance().removeUserById(id_int);
 			res = Response.ok().build();
 		} else {
 			// throw new RuntimeException("Delete: Tarea con id " + id + " no
@@ -73,7 +75,7 @@ public class UsuarioResource {
 	private Response putAndGetResponse(Usuario usuario) {
 		Response res;
 		if (UsuarioDao.getInstance().containsId(usuario.getId())) {
-			UsuarioDao.getInstance().replaceUser(usuario.getId(), usuario);
+			UsuarioDao.getInstance().replaceUser(usuario);
 			res = Response.noContent().build();
 		} else {
 			res = Response.status(Response.Status.NOT_FOUND).build();

@@ -32,10 +32,11 @@ public class AmigoListResource {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response getAmigos(@PathParam("usuario") String id) {
-		if (UsuarioDao.getInstance().containsId(id)) {
+		int id_int = Integer.parseInt(id);
+		if (UsuarioDao.getInstance().containsId(id_int)) {
 			// User exists
 			List<Usuario> amigos = new ArrayList<Usuario>();
-			amigos.addAll(UsuarioDao.getInstance().getUser(id).getAmigos().values());
+			amigos.addAll(UsuarioDao.getInstance().getUser(id_int).getAmigos().values());
 			return Response.ok(new UsuarioList(amigos)).build();
 		} else
 			// User doesn't exist
@@ -46,9 +47,11 @@ public class AmigoListResource {
 	@Produces(MediaType.TEXT_HTML)
 	@Consumes(MediaType.APPLICATION_ATOM_XML)
 	public Response addAmigo(@PathParam("usuario") String id, JAXBElement<Usuario> amigo) throws IOException {
-		if (UsuarioDao.getInstance().containsId(id) && UsuarioDao.getInstance().containsId(amigo.getValue().getId())) {
+		int id_int = Integer.parseInt(id);
+		if (UsuarioDao.getInstance().containsId(id_int)
+				&& UsuarioDao.getInstance().containsId(amigo.getValue().getId())) {
 			Usuario a = UsuarioDao.getInstance().getUser(amigo.getValue().getId());
-			Usuario usuario = UsuarioDao.getInstance().getUser(id);
+			Usuario usuario = UsuarioDao.getInstance().getUser(id_int);
 			usuario.getAmigos().put(a.getId(), a);
 
 			// return Location of added Friend (actual URI + "/{user-id}")
