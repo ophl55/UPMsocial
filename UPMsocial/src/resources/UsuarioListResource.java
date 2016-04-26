@@ -1,6 +1,8 @@
 package resources;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,18 +35,23 @@ public class UsuarioListResource {
 	public Response getUsers() {
 		List<Usuario> usuarios = new ArrayList<Usuario>();
 		usuarios.addAll(UsuarioDao.getInstance().getUsers());
+		System.out.println("UsuarioListResource: getUsers() called!");
 		return Response.ok(new UsuarioList(usuarios)).build();
 	}
 
 	@POST
 	@Produces(MediaType.TEXT_HTML)
 	@Consumes(MediaType.APPLICATION_XML)
-	public Response newUser(JAXBElement<Usuario> usuario) throws IOException {
+	public Response newUser(JAXBElement<Usuario> usuario) throws IOException, URISyntaxException {
 		Usuario u = usuario.getValue();
 		int generated_id = UsuarioDao.getInstance().addUser(u);
 
-		return Response.created(uriInfo.getAbsolutePath())
-				.header("Location", uriInfo.getAbsolutePath().toString() + "/" + generated_id).build();
+		System.out.println("Created user with id=" + generated_id + " and name=" + usuario.getName());
+
+		// return Response.created(uriInfo.getAbsolutePath()).header("Location",
+		// uriInfo.getAbsolutePath().toString())
+		// .build();
+		return Response.created(new URI(uriInfo.getAbsolutePath().toString() + "/" + generated_id)).build();
 	}
 
 }

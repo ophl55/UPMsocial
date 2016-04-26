@@ -1,6 +1,8 @@
 package resources;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +47,10 @@ public class AmigoListResource {
 
 	@POST
 	@Produces(MediaType.TEXT_HTML)
-	@Consumes(MediaType.APPLICATION_ATOM_XML)
-	public Response addAmigo(@PathParam("usuario") String id, JAXBElement<Usuario> amigo) throws IOException {
+	@Consumes(MediaType.APPLICATION_XML)
+	public Response addAmigo(@PathParam("usuario") String id, JAXBElement<Usuario> amigo)
+			throws IOException, URISyntaxException {
+		System.out.println("Adding friend " + id + ":\t " + amigo.getValue().toString());
 		int id_int = Integer.parseInt(id);
 		if (UsuarioDao.getInstance().containsId(id_int)
 				&& UsuarioDao.getInstance().containsId(amigo.getValue().getId())) {
@@ -55,8 +59,7 @@ public class AmigoListResource {
 			usuario.getAmigos().put(a.getId(), a);
 
 			// return Location of added Friend (actual URI + "/{user-id}")
-			return Response.created(uriInfo.getAbsolutePath())
-					.header("Location", uriInfo.getAbsolutePath().toString() + "/" + a.getId()).build();
+			return Response.created(new URI(uriInfo.getAbsolutePath().toString() + "/" + a.getId())).build();
 		} else
 			return Response.status(Response.Status.NOT_FOUND).build();
 	}
