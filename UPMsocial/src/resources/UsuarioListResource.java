@@ -41,8 +41,7 @@ public class UsuarioListResource {
 	@Consumes(MediaType.APPLICATION_XML)
 	public Response newUser(JAXBElement<Usuario> usuario) throws IOException {
 		Usuario u = usuario.getValue();
-		String generated_id = UsuarioDao.getInstance().addUser(u);
-		u.setId(generated_id);
+		int generated_id = UsuarioDao.getInstance().addUser(u);
 
 		return Response.created(uriInfo.getAbsolutePath())
 				.header("Location", uriInfo.getAbsolutePath().toString() + "/" + generated_id).build();
