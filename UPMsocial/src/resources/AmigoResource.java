@@ -14,13 +14,13 @@ public class AmigoResource {
 	@DELETE
 	public Response removeFriend(@PathParam("usuario") String user_id, @PathParam("amigo") String friend_id) {
 		Response res;
-		if (UsuarioDao.getInstance().getModel().containsKey(user_id)
-				&& UsuarioDao.getInstance().getModel().containsKey(friend_id)) {
-
-			UsuarioDao.getInstance().getModel().get(user_id).getAmigos()
-					.remove(UsuarioDao.getInstance().getModel().get(friend_id));
+		if (UsuarioDao.getInstance().containsId(user_id) && UsuarioDao.getInstance().containsId(friend_id)) {
+			// User and friend exist...
+			// Remove friend from users friend list
+			UsuarioDao.getInstance().getUser(user_id).getAmigos().remove(UsuarioDao.getInstance().getUser(friend_id));
 			res = Response.ok().build();
 		} else {
+			// User or friend not existing
 			res = Response.noContent().build();
 		}
 		return res;

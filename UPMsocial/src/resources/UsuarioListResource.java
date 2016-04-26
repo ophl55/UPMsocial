@@ -30,29 +30,22 @@ public class UsuarioListResource {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public UsuarioList getUsers() {
+	public Response getUsers() {
 		List<Usuario> usuarios = new ArrayList<Usuario>();
-		usuarios.addAll(UsuarioDao.getInstance().getModel().values());
-		return new UsuarioList(usuarios);
+		usuarios.addAll(UsuarioDao.getInstance().getUsers());
+		return Response.ok(new UsuarioList(usuarios)).build();
 	}
 
 	@POST
 	@Produces(MediaType.TEXT_HTML)
-	@Consumes(MediaType.APPLICATION_ATOM_XML)
+	@Consumes(MediaType.APPLICATION_XML)
 	public Response newUser(JAXBElement<Usuario> usuario) throws IOException {
 		Usuario u = usuario.getValue();
-		UsuarioDao.getInstance().getModel().put(u.getId(), u); // TODO get
-																// generated ID
-																// of new user!
-																// (not
-																// insert it
-																// with passed
-																// id)
-
-		System.out.println(UsuarioDao.getInstance().getModel().get(u.getId()));
+		String generated_id = UsuarioDao.getInstance().addUser(u);
+		u.setId(generated_id);
 
 		return Response.created(uriInfo.getAbsolutePath())
-				.header("Location", uriInfo.getAbsolutePath().toString() + "/" + u.getId()).build();
+				.header("Location", uriInfo.getAbsolutePath().toString() + "/" + generated_id).build();
 	}
 
 }

@@ -1,14 +1,14 @@
 package model;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Usuario {
-	private String id; // TODO id überhaupt benötigt?
+	private String id;
 	private String nombre;
-	private List<Usuario> amigos;
+	private Map<String, Usuario> amigos;
 
 	public Usuario() {
 	}
@@ -18,7 +18,7 @@ public class Usuario {
 		this.nombre = nombre;
 	}
 
-	public Usuario(String id, String nombre, List<Usuario> amigos) {
+	public Usuario(String id, String nombre, Map<String, Usuario> amigos) {
 		this.id = id;
 		this.nombre = nombre;
 		this.amigos = amigos;
@@ -40,12 +40,12 @@ public class Usuario {
 		this.nombre = nombre;
 	}
 
-	public void setAmigos(List<Usuario> amigos) {
-		this.amigos = amigos;
+	public Map<String, Usuario> getAmigos() {
+		return amigos;
 	}
 
-	public List<Usuario> getAmigos() {
-		return amigos;
+	public void setAmigos(Map<String, Usuario> amigos) {
+		this.amigos = amigos;
 	}
 
 	@Override

@@ -31,8 +31,8 @@ public class UsuarioResource {
 	public Response getUser(@PathParam("usuario") String id) {
 		Response res;
 		Usuario usuario;
-		if (UsuarioDao.getInstance().getModel().containsKey(id)) {
-			usuario = UsuarioDao.getInstance().getModel().get(id);
+		if (UsuarioDao.getInstance().containsId(id)) {
+			usuario = UsuarioDao.getInstance().getUser(id);
 			res = Response.ok(usuario).build();
 		} else {
 			res = Response.status(Response.Status.NOT_FOUND).build();
@@ -52,8 +52,8 @@ public class UsuarioResource {
 	@DELETE
 	public Response deleteUser(@PathParam("usuario") String id) {
 		Response res;
-		if (UsuarioDao.getInstance().getModel().containsKey(id)) {
-			UsuarioDao.getInstance().getModel().remove(id);
+		if (UsuarioDao.getInstance().containsId(id)) {
+			UsuarioDao.getInstance().removeUserById(id);
 			res = Response.ok().build();
 		} else {
 			// throw new RuntimeException("Delete: Tarea con id " + id + " no
@@ -63,14 +63,20 @@ public class UsuarioResource {
 		return res;
 	}
 
+	/**
+	 * Modifies the passed user, only if it exists
+	 * 
+	 * @param usuario
+	 *            modified user object
+	 * @return
+	 */
 	private Response putAndGetResponse(Usuario usuario) {
 		Response res;
-		if (UsuarioDao.getInstance().getModel().containsKey(usuario.getId())) {
+		if (UsuarioDao.getInstance().containsId(usuario.getId())) {
+			UsuarioDao.getInstance().replaceUser(usuario.getId(), usuario);
 			res = Response.noContent().build();
 		} else {
-			UsuarioDao.getInstance().getModel().put(usuario.getId(), usuario);
-			res = Response.created(uriInfo.getAbsolutePath()).header("Location", uriInfo.getAbsolutePath().toString())
-					.build();
+			res = Response.status(Response.Status.NOT_FOUND).build();
 		}
 		return res;
 	}
