@@ -12,6 +12,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
@@ -33,13 +34,31 @@ public class AmigoListResource {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response getAmigos(@PathParam("usuario") String id) {
+	public Response getAmigos(@PathParam("usuario") String id, @QueryParam("name") String name,
+			@QueryParam("start") int start, @QueryParam("end") int end) {
 		int id_int = Integer.parseInt(id);
 		if (UsuarioDao.getInstance().containsId(id_int)) {
 			// User exists
 			List<Usuario> amigos = new ArrayList<Usuario>();
-			amigos.addAll(UsuarioDao.getInstance().getUser(id_int).getAmigos().values());
-			return Response.ok(new UsuarioList(amigos)).build();
+
+			System.out.println("name=" + name + "\tstart=" + start + "\tend=" + end);
+
+			// Filtering by name...
+			if (name == null)
+				amigos.addAll(UsuarioDao.getInstance().getUser(id_int).getAmigos().values());
+			else
+				for (Usuario amigo : UsuarioDao.getInstance().getUser(id_int).getAmigos().values()) {
+					// add friends whose names are containing the name
+					// query-param
+					if (amigo.getNombre().toLowerCase().contains(name.toLowerCase()))
+						amigos.add(amigo);
+				}
+
+			if (end == 0 || end >= amigos.size())
+				// end was not set in request URL
+				end = amigos.size();
+
+			return Response.ok(new UsuarioList(amigos.subList(start, end))).build();
 		} else
 			// User doesn't exist
 			return Response.status(Response.Status.NOT_FOUND).build();

@@ -11,6 +11,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
@@ -32,10 +33,21 @@ public class UsuarioListResource {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response getUsers() {
+	public Response getUsers(@QueryParam("name") String name) {
+
 		List<Usuario> usuarios = new ArrayList<Usuario>();
-		usuarios.addAll(UsuarioDao.getInstance().getUsers());
-		System.out.println("UsuarioListResource: getUsers() called!");
+
+		if (name == null)
+			// query parameter "name" not set
+			usuarios.addAll(UsuarioDao.getInstance().getUsers());
+		else
+			// query parameter "name" set!
+			for (Usuario u : UsuarioDao.getInstance().getUsers()) {
+			// only add users that contain searched name
+			if (u.getNombre().toLowerCase().contains(name.toLowerCase()))
+			usuarios.add(u);
+			}
+
 		return Response.ok(new UsuarioList(usuarios)).build();
 	}
 

@@ -18,8 +18,8 @@ public class AmigoResource {
 		if (UsuarioDao.getInstance().containsId(userId_int) && UsuarioDao.getInstance().containsId(friendId_int)) {
 			// User and friend exist...
 			// Remove friend from users friend list
-			UsuarioDao.getInstance().getUser(userId_int).getAmigos()
-					.remove(UsuarioDao.getInstance().getUser(friendId_int));
+			System.out.println("Removing friend " + friend_id + " from friendlist of user " + user_id);
+			UsuarioDao.getInstance().getUser(userId_int).getAmigos().remove(friendId_int);
 			res = Response.ok().build();
 		} else {
 			// User or friend not existing
