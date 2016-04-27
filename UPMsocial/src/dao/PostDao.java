@@ -1,7 +1,8 @@
 package dao;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,7 +15,10 @@ import model.Post;
 public class PostDao {
 	private Map<Integer, Post> contentProvider = new HashMap<>();
 	private int lastId = 0;
+	private SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
 
+
+	
 	private static PostDao instance = null;
 
 	private PostDao() {
@@ -53,7 +57,7 @@ public class PostDao {
 	 */
 	public int addPost(Post post) {
 		post.setId(lastId);
-		post.setDate(new Date());
+		post.setDate(sdfDate.format(new Date()));
 		contentProvider.put(post.getId(), post);
 		lastId++;
 		return post.getId();
@@ -110,17 +114,32 @@ public class PostDao {
 		return contentProvider.containsKey(id);
 	}
 
-	public List<Post> getPosts(int userId) {
+	public List<Post> getPosts(int userId, String startDate, String endDate) {
 		List<Post> l = new ArrayList<Post>();
 		Iterator<Map.Entry<Integer, Post>> entries = contentProvider.entrySet().iterator();
 		while (entries.hasNext()) {
 		  Map.Entry<Integer, Post> entry = entries.next();
-		  int key = entry.getKey();
 		  Post value = entry.getValue();
-		  if (value.getUserId() == userId)
+		  if (value.getUserId() == userId && checkDate(value.getDate(), startDate, endDate))
 			  l.add(value);
 		}
 		return l;
+	}
+	
+	public List<Post> getPosts(int userId, String startDate, String endDate, int start, int end) {
+		List<Post> l = new ArrayList<Post>();
+		Iterator<Map.Entry<Integer, Post>> entries = contentProvider.entrySet().iterator();
+		while (entries.hasNext()) {
+		  Map.Entry<Integer, Post> entry = entries.next();
+		  Post value = entry.getValue();
+		  if (value.getUserId() == userId && checkDate(value.getDate(), startDate, endDate))
+			  l.add(value);
+		}
+		
+		if (end == 0 || end >= l.size())
+			end = l.size();
+		
+		return l.subList(start, end);
 	}
 
 	/**
@@ -145,4 +164,24 @@ public class PostDao {
 		return contentProvider.get(id);
 	}
 
+	private boolean checkDate(String date, String startDate, String endDate) {
+		Date dt, sDt, eDt;
+
+		if (startDate == null && endDate == null)
+			return true;
+		
+		try {
+			dt = sdfDate.parse(date);
+			sDt = sdfDate.parse(startDate);
+			eDt = sdfDate.parse(endDate);
+			if (dt.before(sDt) || dt.after(eDt))
+				return false;
+			else
+				return true;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

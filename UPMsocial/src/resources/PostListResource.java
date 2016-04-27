@@ -3,7 +3,6 @@ package resources;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -12,6 +11,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
@@ -33,8 +33,14 @@ public class PostListResource {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response getPosts(@PathParam("usuario") int usuario) {
-		List<Post> posts = PostDao.getInstance().getPosts(usuario);
+	public Response getPosts(
+			@PathParam("usuario") int usuario,
+			@QueryParam("startDate") String startDate,
+			@QueryParam("endDate") String endDate,
+			@QueryParam("start") int start,
+			@QueryParam("end") int end
+			) {
+		List<Post> posts = PostDao.getInstance().getPosts(usuario, startDate, endDate, start, end);
 		System.out.println("PostListResource: getPosts() called!");
 		return Response.ok(new PostList(posts)).build();
 	}
@@ -57,8 +63,12 @@ public class PostListResource {
 	@GET
 	@Path("count")
 	@Produces(MediaType.TEXT_PLAIN)
-	  public String getCount(@PathParam("usuario") int usuario) {
-	    int count = PostDao.getInstance().getPosts(usuario).size();
+	  public String getCount(
+			  @PathParam("usuario") int usuario,
+			  @QueryParam("startDate") String startDate,
+			  @QueryParam("endDate") String endDate
+			  ) {
+	    int count = PostDao.getInstance().getPosts(usuario, startDate, endDate).size();
 	    return String.valueOf(count);
 	 }
 }

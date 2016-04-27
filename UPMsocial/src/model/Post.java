@@ -1,15 +1,13 @@
 package model;
 
 
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Post {
 	private int id;
 	private String content;
-	private Date date;
+	private String date;
 	private int userId;
 	
 	public Post() {
@@ -36,11 +34,11 @@ public class Post {
 		this.content = content;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
