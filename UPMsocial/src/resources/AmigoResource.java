@@ -27,5 +27,6 @@ public class AmigoResource {
 		}
 		return res;
 	}
+	
 
 }

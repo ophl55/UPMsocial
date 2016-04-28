@@ -20,7 +20,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
+import dao.PostDao;
 import dao.UsuarioDao;
+import model.Post;
+import model.PostList;
 import model.Usuario;
 import model.UsuarioList;
 
@@ -58,6 +61,10 @@ public class AmigoListResource {
 				// end was not set in request URL
 				end = amigos.size();
 
+			if (start > end || start < 0)
+				// check start for bad values
+				start = 0;
+
 			return Response.ok(new UsuarioList(amigos.subList(start, end))).build();
 		} else
 			// User doesn't exist
@@ -80,6 +87,44 @@ public class AmigoListResource {
 			// return Location of added Friend (actual URI + "/{user-id}")
 			return Response.created(new URI(uriInfo.getAbsolutePath().toString() + "/" + a.getId())).build();
 		} else
+			return Response.status(Response.Status.NOT_FOUND).build();
+	}
+
+	@Path("posts")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Response getPostsOfAmigos(@PathParam("usuario") String id, @QueryParam("dt") String date,
+			@QueryParam("content") String content, @QueryParam("start") int start, @QueryParam("end") int end) {
+		int id_int = Integer.parseInt(id);
+		if (UsuarioDao.getInstance().containsId(id_int)) {
+			// User exists
+			List<Usuario> amigos = new ArrayList<Usuario>();
+			amigos.addAll(UsuarioDao.getInstance().getUser(id_int).getAmigos().values());
+
+			List<Post> posts = new ArrayList<>();
+			// get all matching posts of friends
+			for (Usuario amigo : amigos)
+				for (Post post : PostDao.getInstance().getPosts(amigo.getId(), date, date)) {
+					if (content != null) {
+						// query-param content is set
+						if (post.getContent().toLowerCase().contains(content.toLowerCase()))
+							posts.add(post);
+					} else
+						// query-param content not set
+						posts.add(post);
+				}
+
+			if (end == 0 || end >= posts.size())
+				// end was not set in request URL
+				end = posts.size();
+
+			if (start > end || start < 0)
+				// check start for bad values
+				start = 0;
+
+			return Response.ok(new PostList(posts.subList(start, end))).build();
+		} else
+			// User doesn't exist
 			return Response.status(Response.Status.NOT_FOUND).build();
 	}
 

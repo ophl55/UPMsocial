@@ -23,7 +23,7 @@ import dao.PostDao;
 import model.Post;
 import model.PostList;
 
-@Path("usuarios/{usuario}/posts")
+@Path("/usuarios/{usuario}/posts")
 public class PostListResource {
 
 	@Context
@@ -33,13 +33,8 @@ public class PostListResource {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response getPosts(
-			@PathParam("usuario") int usuario,
-			@QueryParam("startDate") String startDate,
-			@QueryParam("endDate") String endDate,
-			@QueryParam("start") int start,
-			@QueryParam("end") int end
-			) {
+	public Response getPosts(@PathParam("usuario") int usuario, @QueryParam("startDate") String startDate,
+			@QueryParam("endDate") String endDate, @QueryParam("start") int start, @QueryParam("end") int end) {
 		List<Post> posts = PostDao.getInstance().getPosts(usuario, startDate, endDate, start, end);
 		System.out.println("PostListResource: getPosts() called!");
 		return Response.ok(new PostList(posts)).build();
@@ -54,21 +49,16 @@ public class PostListResource {
 
 		System.out.println("Created post with id=" + generated_id + " and name=" + post.getName());
 
-		// return Response.created(uriInfo.getAbsolutePath()).header("Location",
-		// uriInfo.getAbsolutePath().toString())
-		// .build();
 		return Response.created(new URI(uriInfo.getAbsolutePath().toString() + "/" + generated_id)).build();
 	}
 
 	@GET
 	@Path("count")
 	@Produces(MediaType.TEXT_PLAIN)
-	  public String getCount(
-			  @PathParam("usuario") int usuario,
-			  @QueryParam("startDate") String startDate,
-			  @QueryParam("endDate") String endDate
-			  ) {
-	    int count = PostDao.getInstance().getPosts(usuario, startDate, endDate).size();
-	    return String.valueOf(count);
-	 }
+	public String getCount(@PathParam("usuario") int usuario, @QueryParam("startDate") String startDate,
+			@QueryParam("endDate") String endDate) {
+		int count = PostDao.getInstance().getPosts(usuario, startDate, endDate).size();
+		return String.valueOf(count);
+	}
+
 }

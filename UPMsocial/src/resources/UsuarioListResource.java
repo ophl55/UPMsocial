@@ -60,9 +60,6 @@ public class UsuarioListResource {
 
 		System.out.println("Created user with id=" + generated_id + " and name=" + usuario.getName());
 
-		// return Response.created(uriInfo.getAbsolutePath()).header("Location",
-		// uriInfo.getAbsolutePath().toString())
-		// .build();
 		return Response.created(new URI(uriInfo.getAbsolutePath().toString() + "/" + generated_id)).build();
 	}
 

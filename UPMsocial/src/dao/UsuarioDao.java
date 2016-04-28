@@ -52,11 +52,7 @@ public class UsuarioDao {
 	 * @return {@code true} if the user was removed successfully
 	 */
 	public boolean removeUser(Usuario usuario) {
-		if (!containsId(usuario.getId()))
-			return false;
-
-		contentProvider.remove(usuario.getId());
-		return true;
+		return removeUserById(usuario.getId());
 	}
 
 	/**

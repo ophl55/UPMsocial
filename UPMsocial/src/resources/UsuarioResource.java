@@ -17,7 +17,7 @@ import javax.xml.bind.JAXBElement;
 import dao.UsuarioDao;
 import model.Usuario;
 
-@Path("usuarios")
+@Path("/usuarios")
 public class UsuarioResource {
 
 	@Context
