@@ -1,44 +1,27 @@
 package dao;
 
-import java.text.ParseException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+
+import com.mysql.jdbc.Connection;
 
 import model.Post;
+import dao.DBConnection;
 
 public class PostDao {
-	private Map<Integer, Post> contentProvider = new HashMap<>();
-	private int lastId = 0;
 	private SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
 
-
-	
 	private static PostDao instance = null;
 
 	private PostDao() {
-
-		Post post = new Post("Post1");
-		post.setUserId(0);
-		addPost(post);
-		
-		post = new Post("Post2");
+		Post post = new Post("SQL Insert");
 		post.setUserId(1);
 		addPost(post);
-		
-		post = new Post("Post3");
-		post.setUserId(2);
-		addPost(post);
-		
-		post = new Post("Post4");
-		post.setUserId(0);
-		addPost(post);
-
 	}
 
 	public static PostDao getInstance() {
@@ -48,98 +31,161 @@ public class PostDao {
 	}
 
 	/**
-	 * Adds the post to the contentProvider and sets the generated ID and the date of the
-	 * post. The generated ID is also returned.
+	 * Adds the post to the db and sets the date of the post. 
+	 * The generated ID is also returned.
 	 * 
-	 * @param post
-	 *            Post to be added (id of user not important)
-	 * @return The generated ID for the user as a String
+	 * @param post	Post to be added (id of user not important)
+	 * @return 		The generated ID for the user as a String
 	 */
 	public int addPost(Post post) {
-		post.setId(lastId);
+		int id = 0;
 		post.setDate(sdfDate.format(new Date()));
-		contentProvider.put(post.getId(), post);
-		lastId++;
-		return post.getId();
+		
+		String sql = "INSERT INTO post (date, content, usuario_id) VALUES(" 
+				+ "'" + post.getDate() + "',"
+				+ "'" + post.getContent() + "',"
+				+ "'" + String.valueOf(post.getUserId()) + "');";
+		
+		Statement statement = null;
+		Connection connection = DBConnection.getConnection();
+		
+		try {
+			System.out.println("Connecting to a selected database...");
+			statement = connection.createStatement();
+			System.out.println("Connected database successfully...");
+
+			statement.executeUpdate(sql);
+			System.out.println("Inserted records into the table...");
+			
+			sql = "SELECT @@IDENTITY as 'id'";
+			ResultSet rs = statement.executeQuery(sql);
+			rs.next();
+			id = rs.getInt("id");
+			
+		} catch(SQLException se){
+		      //Handle errors for JDBC
+		      se.printStackTrace();
+		} finally{
+			  //finally block used to close resources
+			  DBConnection.closeConnection(statement, connection);
+		}//end try
+		return id;
 	}
 
 	/**
-	 * Removes the post from the list.
+	 * Removes the post from the db, searching it by id
 	 * 
-	 * @param post
-	 *            the post to be removed from the list
-	 * @return {@code true} if the post was removed successfully
-	 */
-	public boolean removePost(Post post) {
-		if (!containsId(post.getId()))
-			return false;
-
-		contentProvider.remove(post.getId());
-		return true;
-	}
-
-	/**
-	 * Removes the post from the list, searching it by id
-	 * 
-	 * @param id
-	 *            the id of the post to delete
-	 * @return {@code true} if the post is removed successfully
+	 * @param id	the id of the post to delete
+	 * @return 		{@code true} if the post is removed successfully
 	 */
 	public boolean removePostById(int id) {
-		if (!containsId(id))
-			return false;
-
-		contentProvider.remove(id);
+		
+		String sql = "DELETE FROM post WHERE id = "
+				+ "'" + String.valueOf(id) + "';";
+		
+		Statement statement = null;
+		Connection connection = DBConnection.getConnection();
+		try {
+			System.out.println("Connecting to a selected database...");
+			statement = connection.createStatement();
+			System.out.println("Connected database successfully...");
+		    
+			statement.executeUpdate(sql);
+		    System.out.println("Deleted record from the table...");
+		} catch(SQLException se){
+		      //Handle errors for JDBC
+		      se.printStackTrace();
+		      return false;
+		} finally{
+			  //finally block used to close resources
+			  DBConnection.closeConnection(statement, connection);
+		}//end try
 		return true;
 	}
 
 	/**
-	 * Tests if the list contains the post.
+	 * db query to check if the post with the given id exists in the db.
 	 * 
-	 * @param post
-	 *            the post to search for.
-	 * @return {@code true} if the post is found in the list
-	 */
-	public boolean contains(Post post) {
-		return contentProvider.containsValue(post);
-	}
-
-	/**
-	 * 
-	 * @param id
-	 *            the id to be searched
-	 * @return {@code true} if the id is inside the range of the list
+	 * @param id	the id to be searched
+	 * @return 		{@code true} if the id is inside the range of the list
 	 */
 	public boolean containsId(int id) {
-		return contentProvider.containsKey(id);
-	}
-
-	public List<Post> getPosts(int userId, String startDate, String endDate) {
-		List<Post> l = new ArrayList<Post>();
-		Iterator<Map.Entry<Integer, Post>> entries = contentProvider.entrySet().iterator();
-		while (entries.hasNext()) {
-		  Map.Entry<Integer, Post> entry = entries.next();
-		  Post value = entry.getValue();
-		  if (value.getUserId() == userId && checkDate(value.getDate(), startDate, endDate))
-			  l.add(value);
-		}
-		return l;
+		String sql = "SELECT count(*) FROM post WHERE id = "
+				+ "'" + String.valueOf(id) + "';";
+		
+		Statement statement = null;
+		Connection connection = DBConnection.getConnection();
+		try {
+			System.out.println("Connecting to a selected database...");
+			statement = connection.createStatement();
+			System.out.println("Connected database successfully...");
+		    
+			ResultSet rs = statement.executeQuery(sql);
+			rs.next();
+			if(rs.getInt("count(*)") > 0){
+				System.out.println("Table contains id!");
+				return true;				
+			}
+			else
+				System.out.println("Table doesn't contain id!");
+				return false;
+		} catch(SQLException se){
+		      //Handle errors for JDBC
+		      se.printStackTrace();
+		} finally{
+			  //finally block used to close resources
+			  DBConnection.closeConnection(statement, connection);
+		}//end try
+		return false;
 	}
 	
+	/**
+	 * Executes db-query to get a list of posts for a user.
+	 * Only considers the searching parameters if they are set.
+	 *  
+	 * @param userId
+	 * @param startDate	filter-param
+	 * @param endDate	filter-param
+	 * @param start		filter-param
+	 * @param end		filter-param
+	 * @return ArrayList containing all results in dependency on the filter-params
+	 */
 	public List<Post> getPosts(int userId, String startDate, String endDate, int start, int end) {
 		List<Post> l = new ArrayList<Post>();
-		Iterator<Map.Entry<Integer, Post>> entries = contentProvider.entrySet().iterator();
-		while (entries.hasNext()) {
-		  Map.Entry<Integer, Post> entry = entries.next();
-		  Post value = entry.getValue();
-		  if (value.getUserId() == userId && checkDate(value.getDate(), startDate, endDate))
-			  l.add(value);
-		}
 		
-		if (end == 0 || end >= l.size())
-			end = l.size();
+		String sql = "SELECT * FROM post WHERE "
+				+ "usuario_id = '" + String.valueOf(userId) +"' ";
+		if(startDate != null && endDate != null)
+			sql += "&& date >= '" + startDate + "' && "
+					+ "date <= '" + endDate + "' ";
+		if(end != 0)
+			sql += "LIMIT " + String.valueOf(start) + "," + String.valueOf(end);
 		
-		return l.subList(start, end);
+		Statement statement = null;
+		Connection connection = DBConnection.getConnection();
+		try {
+			System.out.println("Connecting to a selected database...");
+			statement = connection.createStatement();
+			System.out.println("Connected database successfully...");
+		    
+			ResultSet rs = statement.executeQuery(sql);
+			while(rs.next()){
+				l.add(new Post(
+						rs.getInt("id"),
+						rs.getString("content"),
+						rs.getString("date"),
+						rs.getInt("usuario_id")
+						));				
+			}
+		} catch(SQLException se){
+		      //Handle errors for JDBC
+		      se.printStackTrace();
+		} finally{
+			  //finally block used to close resources
+			  DBConnection.closeConnection(statement, connection);
+		}//end try
+		
+		return l;
 	}
 
 	/**
@@ -147,41 +193,32 @@ public class PostDao {
 	 * 
 	 * @param post
 	 *            the new post data
-	 * @return {@code true} if the user is replaced successfully, false if the
-	 *         id doesn't exist.
+	 * @return {@code true} if the user is replaced successfully, false if error occurs.
 	 */
 	public boolean replacePost(Post post) {
-		if (!containsId(post.getId()))
-			return false;
-
-		contentProvider.put(post.getId(), post);
-		return true;
-	}
-
-	public Post getPost(int id) throws NoSuchElementException {
-		if (!containsId(id))
-			throw new NoSuchElementException("Post with id " + id + " not existing in List!");
-		return contentProvider.get(id);
-	}
-
-	private boolean checkDate(String date, String startDate, String endDate) {
-		Date dt, sDt, eDt;
-
-		if (startDate == null && endDate == null)
-			return true;
+		String sql = "UPDATE post SET "
+				+ "content = '" + post.getContent() + "', "
+				+ "date = '" + post.getDate() + "' "
+				+ "usuario_id = '" + String.valueOf(post.getUserId()) + "', "
+				+ "WHERE id = '" + String.valueOf(post.getId()) + "';";
 		
+		Statement statement = null;
+		Connection connection = DBConnection.getConnection();
 		try {
-			dt = sdfDate.parse(date);
-			sDt = sdfDate.parse(startDate);
-			eDt = sdfDate.parse(endDate);
-			if (dt.before(sDt) || dt.after(eDt))
-				return false;
-			else
-				return true;
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return false;
+			System.out.println("Connecting to a selected database...");
+			statement = connection.createStatement();
+			System.out.println("Connected database successfully...");
+		    
+			statement.executeUpdate(sql);
+		    System.out.println("Updated record from the table...");
+		} catch(SQLException se){
+		      //Handle errors for JDBC
+		      se.printStackTrace();
+		      return false;
+		} finally{
+			  //finally block used to close resources
+			  DBConnection.closeConnection(statement, connection);
+		}//end try
+		return true;
 	}
 }

@@ -13,6 +13,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
 import dao.PostDao;
+import dao.UsuarioDao;
 import model.Post;
 
 @Path("usuarios/{usuario}/posts")
@@ -28,42 +29,33 @@ public class PostResource {
 	@PUT
 	@Consumes(MediaType.APPLICATION_XML)
 	public Response putPost(JAXBElement<Post> post) {
+		Response res;
 		Post p = post.getValue();
-		return putAndGetResponse(p);
+		
+		if (!UsuarioDao.getInstance().containsId(p.getUserId()) || !PostDao.getInstance().containsId(p.getId()))
+			res = Response.status(Response.Status.NOT_FOUND).build();
+		else 
+			res = Response.status(Response.Status.NO_CONTENT).build();
+		
+		return res;
 	}
 	
 	@Path("{post}")
 	@DELETE
-	public Response deleteUser(@PathParam("post") String id) {
-		int id_int = Integer.parseInt(id);
+	public Response deletePost(
+			@PathParam("usuario") int usuarioId,
+			@PathParam("post") int postId) {
+		
 		Response res;
-		if (PostDao.getInstance().containsId(id_int)) {
-			PostDao.getInstance().removePostById(id_int);
-			res = Response.ok().build();
-		} else {
-			// throw new RuntimeException("Delete: Tarea con id " + id + " no
-			// encontrada");
-			res = Response.noContent().build();
-		}
-		return res;
-	}
-	
-	/**
-	 * Modifies the passed post, only if it exists
-	 * 
-	 * @param post
-	 *            modified post object
-	 * @return
-	 */
-	private Response putAndGetResponse(Post post) {
-		Response res;
-		if (PostDao.getInstance().containsId(post.getId())) {
-			PostDao.getInstance().replacePost(post);
-			res = Response.noContent().build();
-		} else {
+		
+		
+		if (!UsuarioDao.getInstance().containsId(usuarioId) || !PostDao.getInstance().containsId(postId))
 			res = Response.status(Response.Status.NOT_FOUND).build();
+		else {
+			PostDao.getInstance().removePostById(postId);
+			res = Response.status(Response.Status.NO_CONTENT).build();
 		}
+		
 		return res;
 	}
-
 }

@@ -9,7 +9,7 @@ import com.mysql.jdbc.Connection;
 
 public class DBConnection {
 
-	private static DBConnection instance = new DBConnection();
+	private static DBConnection instance = null;
 	public static final String URL = "jdbc:mysql://localhost:3306/myUPMsocial";
 	public static final String USER = "root";
 	public static final String PASSWORD = "t00r";
@@ -39,7 +39,25 @@ public class DBConnection {
 	}
 
 	public static Connection getConnection() {
+		if (instance == null)
+			instance = new DBConnection();
 		return instance.createConnection();
+	}
+	
+	public static void closeConnection(Statement stmt, Connection conn){
+		//finally block used to close resources
+	      try{
+	         if(stmt!=null)
+	            conn.close();
+	      } catch(SQLException se){
+	      }// do nothing
+	      try{
+	         if(conn!=null)
+	            conn.close();
+	      } catch(SQLException se){
+	         se.printStackTrace();
+	      }//end finally try
+	   System.out.println("Connection closed!");
 	}
 
 	// To test database
@@ -60,5 +78,4 @@ public class DBConnection {
 			e.printStackTrace();
 		}
 	}
-
 }

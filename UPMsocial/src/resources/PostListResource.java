@@ -20,6 +20,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
 import dao.PostDao;
+import dao.UsuarioDao;
 import model.Post;
 import model.PostList;
 
@@ -33,11 +34,23 @@ public class PostListResource {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response getPosts(@PathParam("usuario") int usuario, @QueryParam("startDate") String startDate,
-			@QueryParam("endDate") String endDate, @QueryParam("start") int start, @QueryParam("end") int end) {
-		List<Post> posts = PostDao.getInstance().getPosts(usuario, startDate, endDate, start, end);
-		System.out.println("PostListResource: getPosts() called!");
-		return Response.ok(new PostList(posts)).build();
+	public Response getPosts(
+			@PathParam("usuario") int usuario, 
+			@QueryParam("startDate") String startDate,
+			@QueryParam("endDate") String endDate, 
+			@QueryParam("start") int start, 
+			@QueryParam("end") int end) {
+		
+		Response res;
+		
+		if (!UsuarioDao.getInstance().containsId(usuario)){
+			res = Response.status(Response.Status.NOT_FOUND).build();			
+		}
+		else {
+			List<Post> posts = PostDao.getInstance().getPosts(usuario, startDate, endDate, start, end);
+			res = Response.ok(new PostList(posts)).build();			
+		}
+		return res;
 	}
 
 	@POST
@@ -47,18 +60,27 @@ public class PostListResource {
 		Post p = post.getValue();
 		int generated_id = PostDao.getInstance().addPost(p);
 
-		System.out.println("Created post with id=" + generated_id + " and name=" + post.getName());
-
 		return Response.created(new URI(uriInfo.getAbsolutePath().toString() + "/" + generated_id)).build();
 	}
 
 	@GET
 	@Path("count")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getCount(@PathParam("usuario") int usuario, @QueryParam("startDate") String startDate,
+	public Response getCount(@PathParam("usuario") int usuario, 
+			@QueryParam("startDate") String startDate,
 			@QueryParam("endDate") String endDate) {
-		int count = PostDao.getInstance().getPosts(usuario, startDate, endDate).size();
-		return String.valueOf(count);
+		
+		Response res;
+		int count;
+		
+		if (!UsuarioDao.getInstance().containsId(usuario)){
+			res = Response.status(Response.Status.NOT_FOUND).build();
+		} 
+		else {
+			count = PostDao.getInstance().getPosts(usuario, startDate, endDate, 0, 0).size();
+			res = Response.ok(String.valueOf(count)).build();
+		}
+		return res;
 	}
 
 }

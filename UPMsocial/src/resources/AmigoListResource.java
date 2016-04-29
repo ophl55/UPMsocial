@@ -104,7 +104,7 @@ public class AmigoListResource {
 			List<Post> posts = new ArrayList<>();
 			// get all matching posts of friends
 			for (Usuario amigo : amigos)
-				for (Post post : PostDao.getInstance().getPosts(amigo.getId(), date, date)) {
+				for (Post post : PostDao.getInstance().getPosts(amigo.getId(), date, date, 0, 0)) {
 					if (content != null) {
 						// query-param content is set
 						if (post.getContent().toLowerCase().contains(content.toLowerCase()))
