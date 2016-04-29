@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `myUPMsocial`.`post` (
   CONSTRAINT `fk_post_usuario`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `myUPMsocial`.`usuario` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `myUPMsocial`.`amigos` (
   CONSTRAINT `fk_usuario_has_usuario_usuario2`
     FOREIGN KEY (`usuario2_id`)
     REFERENCES `myUPMsocial`.`usuario` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 

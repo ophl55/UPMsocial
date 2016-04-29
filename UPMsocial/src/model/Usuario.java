@@ -1,16 +1,11 @@
 package model;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Usuario {
 	private int id;
 	private String nombre;
-
-	private Map<Integer, Usuario> amigos = new HashMap<>();
 
 	public Usuario() {
 	}
@@ -39,14 +34,6 @@ public class Usuario {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	public Map<Integer, Usuario> getAmigos() {
-		return amigos;
-	}
-
-	public void setAmigos(Map<Integer, Usuario> amigos) {
-		this.amigos = amigos;
 	}
 
 	@Override

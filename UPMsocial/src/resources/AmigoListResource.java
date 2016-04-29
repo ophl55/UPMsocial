@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
+import dao.AmigoDao;
 import dao.PostDao;
 import dao.UsuarioDao;
 import model.Post;
@@ -44,28 +45,9 @@ public class AmigoListResource {
 			// User exists
 			List<Usuario> amigos = new ArrayList<Usuario>();
 
-			System.out.println("name=" + name + "\tstart=" + start + "\tend=" + end);
+			amigos.addAll(AmigoDao.getInstance().getAmigos(id_int, name, start, end));
 
-			// Filtering by name...
-			if (name == null)
-				amigos.addAll(UsuarioDao.getInstance().getUser(id_int).getAmigos().values());
-			else
-				for (Usuario amigo : UsuarioDao.getInstance().getUser(id_int).getAmigos().values()) {
-					// add friends whose names are containing the name
-					// query-param
-					if (amigo.getNombre().toLowerCase().contains(name.toLowerCase()))
-						amigos.add(amigo);
-				}
-
-			if (end == 0 || end >= amigos.size())
-				// end was not set in request URL
-				end = amigos.size();
-
-			if (start > end || start < 0)
-				// check start for bad values
-				start = 0;
-
-			return Response.ok(new UsuarioList(amigos.subList(start, end))).build();
+			return Response.ok(new UsuarioList(amigos)).build();
 		} else
 			// User doesn't exist
 			return Response.status(Response.Status.NOT_FOUND).build();
@@ -78,14 +60,12 @@ public class AmigoListResource {
 			throws IOException, URISyntaxException {
 		System.out.println("Adding friend " + id + ":\t " + amigo.getValue().toString());
 		int id_int = Integer.parseInt(id);
-		if (UsuarioDao.getInstance().containsId(id_int)
-				&& UsuarioDao.getInstance().containsId(amigo.getValue().getId())) {
-			Usuario a = UsuarioDao.getInstance().getUser(amigo.getValue().getId());
-			Usuario usuario = UsuarioDao.getInstance().getUser(id_int);
-			usuario.getAmigos().put(a.getId(), a);
+		int friend_id = amigo.getValue().getId();
+		if (UsuarioDao.getInstance().containsId(id_int) && UsuarioDao.getInstance().containsId(friend_id)) {
 
-			// return Location of added Friend (actual URI + "/{user-id}")
-			return Response.created(new URI(uriInfo.getAbsolutePath().toString() + "/" + a.getId())).build();
+			AmigoDao.getInstance().addFriend(id_int, friend_id);
+
+			return Response.created(new URI(uriInfo.getAbsolutePath().toString() + "/" + friend_id)).build();
 		} else
 			return Response.status(Response.Status.NOT_FOUND).build();
 	}
