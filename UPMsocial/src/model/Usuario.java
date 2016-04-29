@@ -19,6 +19,12 @@ public class Usuario {
 		this.nombre = nombre;
 	}
 
+	public Usuario(int id, String nombre) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+	}
+
 	public int getId() {
 		return id;
 	}
