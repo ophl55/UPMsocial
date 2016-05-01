@@ -20,7 +20,7 @@ public class AmigoResource {
 				&& AmigoDao.getInstance().removeFriend(userId_int, friendId_int)) {
 			// User and friend exist and removing friend terminated successfully
 
-			res = Response.ok().build();
+			res = Response.noContent().build();
 		} else {
 			// User or friend not existing
 			res = Response.noContent().build();
