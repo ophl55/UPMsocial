@@ -21,7 +21,6 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
 import dao.AmigoDao;
-import dao.PostDao;
 import dao.UsuarioDao;
 import model.Post;
 import model.PostList;
@@ -78,31 +77,12 @@ public class AmigoListResource {
 		int id_int = Integer.parseInt(id);
 		if (UsuarioDao.getInstance().containsId(id_int)) {
 			// User exists
-			List<Usuario> amigos = new ArrayList<Usuario>();
-			amigos.addAll(UsuarioDao.getInstance().getUser(id_int).getAmigos().values());
 
 			List<Post> posts = new ArrayList<>();
 			// get all matching posts of friends
-			for (Usuario amigo : amigos)
-				for (Post post : PostDao.getInstance().getPosts(amigo.getId(), date, date, 0, 0)) {
-					if (content != null) {
-						// query-param content is set
-						if (post.getContent().toLowerCase().contains(content.toLowerCase()))
-							posts.add(post);
-					} else
-						// query-param content not set
-						posts.add(post);
-				}
+			posts.addAll(AmigoDao.getInstance().getPostsOfAmigo(id_int, date, content, start, end));
 
-			if (end == 0 || end >= posts.size())
-				// end was not set in request URL
-				end = posts.size();
-
-			if (start > end || start < 0)
-				// check start for bad values
-				start = 0;
-
-			return Response.ok(new PostList(posts.subList(start, end))).build();
+			return Response.ok(new PostList(posts)).build();
 		} else
 			// User doesn't exist
 			return Response.status(Response.Status.NOT_FOUND).build();

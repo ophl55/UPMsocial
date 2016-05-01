@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
+import dao.AmigoDao;
 import dao.UsuarioDao;
 import model.Usuario;
 import model.UsuarioList;
@@ -78,17 +79,8 @@ public class UsuarioResource {
 		if (UsuarioDao.getInstance().containsId(id_int)) {
 			// User exists
 			List<Usuario> posiblesAmigos = new ArrayList<Usuario>();
-			Usuario u = UsuarioDao.getInstance().getUser(id_int);
 
-			for (Usuario usuario : UsuarioDao.getInstance().getUsers()) {
-				// test if usuario is not the user itself (whose friends we are
-				// looking for), if it is not already
-				// a friend of the user and if it contains the desired name (if
-				// parameter is set)
-				if (usuario.getId() != u.getId() && !u.getAmigos().containsKey(usuario.getId())
-						&& (name == null || usuario.getNombre().toLowerCase().contains(name.toLowerCase())))
-					posiblesAmigos.add(usuario);
-			}
+			posiblesAmigos.addAll(AmigoDao.getInstance().getPosiblesAmigos(id_int, name));
 
 			return Response.ok(new UsuarioList(posiblesAmigos)).build();
 		} else

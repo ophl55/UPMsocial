@@ -89,6 +89,7 @@ public class UsuarioDao {
 	 * @return {@code true} if the user is removed successfully
 	 */
 	public boolean removeUserById(int id) {
+		boolean success = true;
 		String sql = "DELETE FROM usuario WHERE id = " + "'" + String.valueOf(id) + "';";
 
 		Statement statement = null;
@@ -103,12 +104,12 @@ public class UsuarioDao {
 		} catch (SQLException se) {
 			// Handle errors for JDBC
 			se.printStackTrace();
-			return false;
+			success = false;
 		} finally {
 			// finally block used to close resources
 			DBConnection.closeConnection(statement, connection);
 		} // end try
-		return true;
+		return success;
 	}
 
 	/**
