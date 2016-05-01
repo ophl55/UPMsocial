@@ -7,6 +7,7 @@ INSERT INTO `myUPMsocial`.`post` (`date`, `content`, `usuario_id`) VALUES ('2016
 INSERT INTO `myUPMsocial`.`post` (`date`, `content`, `usuario_id`) VALUES ('2016-04-28', 'p2', '1');
 INSERT INTO `myUPMsocial`.`post` (`date`, `content`, `usuario_id`) VALUES ('2016-04-29', 'p3', '1');
 INSERT INTO `myUPMsocial`.`post` (`date`, `content`, `usuario_id`) VALUES ('2016-04-30', 'p4', '2');
+INSERT INTO `myUPMsocial`.`post` (`date`, `content`, `usuario_id`) VALUES ('2016-04-30', 'p5', '3');
 
 INSERT INTO `myUPMsocial`.`amigos` (`usuario1_id`, `usuario2_id`) VALUES ('1', '2');
 INSERT INTO `myUPMsocial`.`amigos` (`usuario1_id`, `usuario2_id`) VALUES ('1', '3');

@@ -65,7 +65,7 @@ public class PostListResource {
 
 	@GET
 	@Path("count")
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.TEXT_HTML)
 	public Response getCount(@PathParam("usuario") int usuario, 
 			@QueryParam("startDate") String startDate,
 			@QueryParam("endDate") String endDate) {
