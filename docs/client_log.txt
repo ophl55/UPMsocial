@@ -1,0 +1,45 @@
+
+# Crear un usuario:
+Response: 201
+Location: http://localhost:8080/UPMsocial/usuarios/5
+
+# Publicar un post nuevo:
+Response: 201
+Location: http://localhost:8080/UPMsocial/usuarios/1/posts/6
+
+# Obtener lista de mis posts:
+My posts: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><posts><post><content>p1</content><date>2016-04-27</date><id>1</id><userId>1</userId></post><post><content>p2</content><date>2016-04-28</date><id>2</id><userId>1</userId></post></posts>
+
+# Modificar un post:
+Response: 204
+
+# Borrar un post:
+Response: 204
+
+# Buscar posibles amigos entre los usuarios:
+Possible amigos: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><usuarios><usuario><id>5</id><nombre>Usuario_Client</nombre></usuario></usuarios>
+
+# Agregar un amigo:
+Response: 201
+Location: http://localhost:8080/UPMsocial/usuarios/1/amigos/5
+
+# Eliminar un amigo:
+Response: 204
+
+# Obtener la lista de amigos usando los filtros disponibles:
+My amigos: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><usuarios><usuario><id>2</id><nombre>u2</nombre></usuario></usuarios>
+
+# Consultar número de posts publicados por mí en un periodo:
+My posts published between 2016-04-27 and 2016-04-28: 1
+
+# Obtener la lista de usuarios:
+Get users: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><usuarios><usuario><id>1</id><nombre>u1</nombre></usuario><usuario><id>2</id><nombre>u2</nombre></usuario><usuario><id>3</id><nombre>u3</nombre></usuario><usuario><id>4</id><nombre>u4</nombre></usuario><usuario><id>5</id><nombre>Usuario_Client</nombre></usuario></usuarios>
+
+# Modificar los datos de nuestro perfil:
+Response: 204
+
+# Darse de baja de la redsocial:
+Response: 200
+
+# Obtener la lista de posts publicados por amigos que contienen un determinadotexto:
+Posts of my amigos: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><posts><post><content>p4</content><date>2016-04-30</date><id>4</id><userId>2</userId></post><post><content>p5</content><date>2016-04-30</date><id>5</id><userId>3</userId></post></posts>
