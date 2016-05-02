@@ -1,0 +1,4 @@
+username = root
+password = t00r
+
+Base de datos utilizada: MySQL Workbench versión 6.3

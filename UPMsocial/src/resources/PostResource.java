@@ -24,38 +24,37 @@ public class PostResource {
 	@Context
 	Request request;
 
-
 	@Path("{post}")
 	@PUT
 	@Consumes(MediaType.APPLICATION_XML)
 	public Response putPost(JAXBElement<Post> post) {
 		Response res;
 		Post p = post.getValue();
-		
+
 		if (!UsuarioDao.getInstance().containsId(p.getUserId()) || !PostDao.getInstance().containsId(p.getId()))
 			res = Response.status(Response.Status.NOT_FOUND).build();
-		else 
+		else {
+			System.out.println("put post!");
+			PostDao.getInstance().replacePost(p);
 			res = Response.status(Response.Status.NO_CONTENT).build();
-		
+		}
+
 		return res;
 	}
-	
+
 	@Path("{post}")
 	@DELETE
-	public Response deletePost(
-			@PathParam("usuario") int usuarioId,
-			@PathParam("post") int postId) {
-		
+	public Response deletePost(@PathParam("usuario") int usuarioId, @PathParam("post") int postId) {
+
 		Response res;
-		
-		
+
 		if (!UsuarioDao.getInstance().containsId(usuarioId) || !PostDao.getInstance().containsId(postId))
 			res = Response.status(Response.Status.NOT_FOUND).build();
 		else {
 			PostDao.getInstance().removePostById(postId);
 			res = Response.status(Response.Status.NO_CONTENT).build();
 		}
-		
+
 		return res;
 	}
 }
